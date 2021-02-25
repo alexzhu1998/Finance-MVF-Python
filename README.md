@@ -15,7 +15,7 @@ To run this program:
 * Run the jupyter notebook
 
 # Example illustration
-![Stock Prices Illustration](./StockPricesIllustration.png)
+Simple Illustrations of stock prices\
 ```
 from pandas.plotting import register_matplotlib_converters
 register_matplotlib_converters()
@@ -34,7 +34,7 @@ plt.title('Cumulative Continuous Returns for 20 stocks')
 plt.show()
 plt.close()
 ```
-![Minimum Variance Frontier](./MinimumVarianceFrontier.png)
+![Stock Prices Illustration](./StockPricesIllustration.png)
 ```
 # Plotting the graph and saved as Q4,5.png
 y = annual_returns_df["Annual Returns"]
@@ -66,3 +66,42 @@ plt.title('Minimum Variance Frontier Unrestricted and Individual stocks')
 plt.show()
 plt.close()
 ```
+![Minimum Variance Frontier](./MinimumVarianceFrontier.png)
+
+```
+# short sale not allowed
+bnds = ((0,None),)*21
+
+trials = 50
+mu_list = np.linspace(0.0,0.3,num = trials)
+
+bnds2 = ((0,None),)*20
+sigmaVector = [None]*trials
+for i in range(trials):
+    mu = mu_list[i]
+    sol = solveWeights(bnds2,0,annual_returnsq16,annual_cov_matrixq16,mu_list[i],0)
+    sigmaVector[i] = sol.fun
+pt2ssNA = pd.DataFrame(np.sqrt(sigmaVector), index =  mu_list, columns = ["sigma"])
+
+sigmaVector = [None]*trials
+for i in range(trials):
+    mu = mu_list[i]
+    sol = solveWeights(bnds,0,annual_returns,annual_cov_matrix,mu_list[i],0)
+    sigmaVector[i] = sol.fun
+pt3ssNATB = pd.DataFrame(np.sqrt(sigmaVector), index =  mu_list, columns = ["sigma"])
+
+
+plt.figure(figsize = (14,7))
+plt.scatter(pt3ssNATB["sigma"],pt3ssNATB.index)
+plt.plot(pt3ssNATB["sigma"], pt3ssNATB.index, label = "20 assets Short Sale banned + Treasury Bill")
+plt.scatter(pt2ssNA["sigma"],pt2ssNA.index)
+plt.plot(pt2ssNA["sigma"], pt2ssNA.index, label = "20 assets Short Sale banned")
+
+plt.legend(loc = 'lower left')
+plt.ylabel('Expected Returns, mu(%)')
+plt.xlabel('Standard Deviations, sigma (%)')
+plt.title('Minimum Variance Frontier Unrestricted vs Restricted')
+plt.show()
+plt.close()
+```
+![Unrestricted vs Restricted](./UnrestrictedVsRestricted.png)
