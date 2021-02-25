@@ -15,6 +15,7 @@ To run this program:
 * Run the jupyter notebook
 
 # Example illustration
+![Stock Prices Illustration](./StockPricesIllustration.png)
 ```
 from pandas.plotting import register_matplotlib_converters
 register_matplotlib_converters()
@@ -33,7 +34,7 @@ plt.title('Cumulative Continuous Returns for 20 stocks')
 plt.show()
 plt.close()
 ```
-
+![Minimum Variance Frontier](./MinimumVarianceFrontier.png)
 ```
 # Plotting the graph and saved as Q4,5.png
 y = annual_returns_df["Annual Returns"]
